@@ -65,5 +65,17 @@ public class ServerTest {
         System.out.println("Returned object: " + forObject);
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
+    
+    @Test
+    public void testSelectQueryAnyGrammar() {
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?string
+                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                                         goslin:lipidClassName ?string . }""");
+        System.out.println("Returned object: " + forObject);
+        assertThat(forObject).contains("\"value\" : \"Cer\"");
+    }
 
 }
