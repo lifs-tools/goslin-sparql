@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.lifstools.jgoslin.domain.LipidAdduct;
+import org.lifstools.jgoslin.domain.LipidLevel;
 import org.lifstools.jgoslin.parser.LipidMapsParser;
 import org.lifstools.jgoslin.parser.Parser;
 import org.lifstools.jgoslin.parser.SwissLipidsParser;
@@ -59,6 +60,10 @@ public class GoslinTripleSource implements TripleSource {
 //				// is supposed to be.
 //				return new EmptyIteration<>();
 //			}
+        } else if (predicate.equals(GoslinIri.LIPID_CLASS_NAME) && subject.isBNode()) {
+            // check for Bnode presence
+            LipidWrappingBnode lipidNode = (LipidWrappingBnode) subject;
+            return new SingletonIteration(vf.createStatement(subject, predicate, vf.createLiteral(lipidNode.getLipidAdduct().getLipidString(LipidLevel.CLASS))));
         } else {
             // All the other cases we can't deal with
             return new EmptyIteration<>();

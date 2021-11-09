@@ -30,4 +30,5 @@ public class GoslinIri {
     public static final IRI HMDB = iri("https://identifiers.org/lipids/nomenclature/","hmdb");
     public static final IRI GOSLIN = iri("https://identifiers.org/lipids/nomenclature/","goslin");
     public static final IRI SHORTHAND_2020 = iri("https://identifiers.org/lipids/nomenclature/","shorthand2020");
+    public static final IRI LIPID_CLASS_NAME = iri("https://identifiers.org/lipids/nomenclature/","lipidClassName");
 }

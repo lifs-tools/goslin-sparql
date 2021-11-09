@@ -19,14 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.rdf4j.http.server.readonly.QueryResponder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.lifstools.jgoslin.domain.LipidAdduct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -50,18 +48,22 @@ public class ServerTest {
         assertThat(queryResponder).isNotNull();
     }
 
-    @Test
-    public void testAskQuery() {
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
-                String.class, "ASK { ?s ?p ?o }")).contains("true");
-
-    }
-
+//    @Test
+//    public void testAskQuery() {
+//        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+//                String.class, "ASK { ?s ?p ?o }")).contains("true");
+//
+//    }
     @Test
     public void testSelectQuery() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
-                String.class, "SELECT * WHERE { ?s ?p ?o }");
-        assertThat(forObject).contains("http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag");
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?string
+                              WHERE { [] goslin:swisslipids 'Cer(d18:1/20:2)' ;
+                                         goslin:lipidClassName ?string . }""");
+        System.out.println("Returned object: " + forObject);
+        assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
 
 }
