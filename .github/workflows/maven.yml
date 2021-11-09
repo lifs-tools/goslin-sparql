@@ -31,13 +31,19 @@ jobs:
     - name: Setup Maven settings.xml
       uses: whelk-io/maven-settings-xml-action@v14
       with:
-        servers: '[{ "id": "lifstools-jfrog", "username": "github-deployer", "password": "${env.ARTIFACTORY_TOKEN_REF}" }]'
+        servers: '[{ "id": "lifstools-jfrog", "username": "github-deployer", "password": "${env.ARTIFACTORY_TOKEN_REF}" }, { "id": "lifs-new-central", "username": "github-deployer", "password": "${env.ARTIFACTORY_TOKEN_REF}" }, { "id": "lifs-new-snapshots", "username": "github-deployer", "password": "${env.ARTIFACTORY_TOKEN_REF}" }]'        
     - name: Set Release version env variable
       env:
         USERNAME: ${{ github.actor }}
         PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV  
+        echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+    - name: Login to LIFS Tools registry
+      uses: docker/login-action@v1
+      with:
+        registry: docker.lifs-tools.org
+        username: ${{ secrets.LIFS_TOOLS_DOCKER_REGISTRY_USER }}
+        password: ${{ secrets.LIFS_TOOLS_DOCKER_REGISTRY_PW }}
     - name: Build with Maven
       env:
         USERNAME: ${{ github.actor }}
@@ -55,6 +61,6 @@ jobs:
         BUILD_ENV: 'github-actions'
         DEFAULT_BRANCH: master
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ./mvnw -B deploy -DskipTests --file pom.xml
+      run: ./mvnw -B deploy -Pdocker -DskipTests --file pom.xml
     
 
