@@ -29,6 +29,9 @@ public class GoslinTripleSource implements TripleSource {
     @Override
     public CloseableIteration<? extends Statement, QueryEvaluationException> getStatements(Resource subject,
             IRI predicate, Value object, Resource... contexts) throws QueryEvaluationException {
+        if (predicate == null) {
+            return new EmptyIteration<>();
+        }
         // TODO Here the main work needs to be done.
         // We should define a set of predicates that allow us to select a parser.
         // Assuming an input query

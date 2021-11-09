@@ -15,12 +15,9 @@ import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.EvaluationStrategy;
-import org.eclipse.rdf4j.query.algebra.evaluation.federation.FederatedService;
-import org.eclipse.rdf4j.query.algebra.evaluation.federation.FederatedServiceResolver;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.BindingAssigner;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.FilterOptimizer;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategy;
-import org.eclipse.rdf4j.query.algebra.evaluation.limited.LimitedSizeEvaluationStrategy;
 import org.eclipse.rdf4j.query.impl.EmptyBindingSet;
 import org.eclipse.rdf4j.sail.SailConnection;
 import org.eclipse.rdf4j.sail.SailException;
@@ -136,11 +133,11 @@ public class GoslinSailConnection implements SailConnection {
     }
 
     @Override
-    public CloseableIteration<Statement, SailException> getStatements(Resource arg0, IRI arg1, Value arg2,
-            boolean arg3, Resource... arg4) throws SailException {
+    public CloseableIteration<Statement, SailException> getStatements(Resource resource, IRI iri, Value value,
+            boolean arg3, Resource... resources) throws SailException {
 
         CloseableIteration<? extends Statement, QueryEvaluationException> statements = new GoslinTripleSource(vf)
-                .getStatements(arg0, arg1, arg2, arg4);
+                .getStatements(resource, iri, value, resources);
         return new CloseableIteratorIteration<Statement, SailException>() {
 
             @Override
