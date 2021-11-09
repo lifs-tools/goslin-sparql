@@ -46,6 +46,8 @@ jobs:
         password: ${{ secrets.LIFS_TOOLS_DOCKER_REGISTRY_PW }}
     - name: Build with Maven
       env:
+        ARTIFACTORY_USERNAME_REF: github-deployer 
+        ARTIFACTORY_TOKEN_REF: ${{ secrets.ARTIFACTORY_TOKEN }}
         USERNAME: ${{ github.actor }}
         PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: ./mvnw -B package --file pom.xml
