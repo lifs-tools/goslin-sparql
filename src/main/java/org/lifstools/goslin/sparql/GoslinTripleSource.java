@@ -46,24 +46,19 @@ public class GoslinTripleSource implements TripleSource {
             parser = SwissLipidsParser.newInstance();
         } else if (predicate.equals(GoslinIri.LIPID_MAPS)) {
             parser = LipidMapsParser.newInstance();
-//		} else if (predicate.equals(TOBEFINED.A_METHOD_ON_A_LIPID_ADDUCT_EG_CLASS_NAME)) {
-//			//We should already have a lipidadjuct as subject.
-//			LipidAdduct lipid = ((LipidWrappingBnode) subject).getLipidAdduct();
-//			final Literal lipidClassName = vf.createLiteral(lipid.getClassName());
-//			if (object == null || lipidClassName.equals(object)) {
-//				Statement stat = vf.createStatement(subject, predicate, lipidClassName);
-//				return new SingletonIteration<Statement, QueryEvaluationException>(stat);
-//			} else {
-//				// if the object is set and it is not the same as what the parse gave we have 
-//				// no results. 
-//				// This could be the case if someone uses this service to test if a value is what it 
-//				// is supposed to be.
-//				return new EmptyIteration<>();
-//			}
         } else if (predicate.equals(GoslinIri.LIPID_CLASS_NAME) && subject.isBNode()) {
-            // check for Bnode presence
-            LipidWrappingBnode lipidNode = (LipidWrappingBnode) subject;
-            return new SingletonIteration(vf.createStatement(subject, predicate, vf.createLiteral(lipidNode.getLipidAdduct().getLipidString(LipidLevel.CLASS))));
+            LipidAdduct lipid = ((LipidWrappingBnode) subject).getLipidAdduct();
+            final Literal lipidClassName = vf.createLiteral(lipid.getLipidString(LipidLevel.CLASS));
+            if (object == null || lipidClassName.equals(object)) {
+                Statement stat = vf.createStatement(subject, predicate, lipidClassName);
+                return new SingletonIteration<>(stat);
+            } else {
+                // if the object is set and it is not the same as what the parse gave we have 
+                // no results. 
+                // This could be the case if someone uses this service to test if a value is what it 
+                // is supposed to be.
+                return new EmptyIteration<>();
+            }
         } else {
             // All the other cases we can't deal with
             return new EmptyIteration<>();
@@ -85,8 +80,6 @@ public class GoslinTripleSource implements TripleSource {
             //The object is not a string so we can't parse it
             return new EmptyIteration<>();
         }
-
-//        return new EmptyIteration<>();
     }
 
     @Override
