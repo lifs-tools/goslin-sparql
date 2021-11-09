@@ -61,9 +61,41 @@ public class ServerTest {
                               PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
                               SELECT ?string
                               WHERE { [] goslin:swisslipids 'Cer(d18:1/20:2)' ;
-                                         goslin:lipidClassName ?string . }""");
-        System.out.println("Returned object: " + forObject);
+                                         goslin:className ?string . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
+    }
+    
+    @Test
+    public void testSelectQueryAnyGrammar() {
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?string
+                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                                         goslin:className ?string . }""");
+        assertThat(forObject).contains("\"value\" : \"Cer\"");
+    }
+    
+    @Test
+    public void testSelectQueryMw() {
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?decimal
+                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                                         goslin:exactMass ?decimal . }""");
+        assertThat(forObject).contains("\"value\" : \"589.5433953749999\"");
+    }
+    
+    @Test
+    public void testSelectQuerySumFormula() {
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?string
+                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                                         goslin:sumFormula ?string . }""");
+        assertThat(forObject).contains("\"value\" : \"C38H71NO3\"");
     }
 
 }
