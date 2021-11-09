@@ -14,15 +14,16 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = { "org.eclipse.rdf4j", "org.lifstools.goslin.sparql" })
+@ComponentScan(basePackages = {"org.eclipse.rdf4j", "org.lifstools.goslin.sparql"})
 @Import(QueryResponder.class)
 public class Server {
-	private static Logger logger = LoggerFactory.getLogger(Server.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     @Bean(destroyMethod = "shutDown")
     public Repository getRepository() {
         logger.info("Starting goslin sparql translator");
-        
+
         SailRepository sailRepository = new SailRepository(new GoslinSparqlStore());
         logger.info("Initializing repository");
         sailRepository.init();

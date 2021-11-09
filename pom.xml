@@ -72,7 +72,7 @@
         <docker.base.image>adoptopenjdk/openjdk17</docker.base.image>
         <docker.base.image.version>debianslim-jre</docker.base.image.version>
         <skip.docker>true</skip.docker>
-        <app.port>8083</app.port>
+        <app.port>8080</app.port>
     </properties>
     <dependencies>
         <dependency>

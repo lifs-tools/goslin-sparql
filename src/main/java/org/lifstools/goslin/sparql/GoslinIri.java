@@ -19,6 +19,7 @@ import org.eclipse.rdf4j.model.IRI;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
+ * These IRIs are not authoritative yet. Identifiers.org does not have a lipid(s) prefix yet.
  *
  * @author nilshoffmann
  */
