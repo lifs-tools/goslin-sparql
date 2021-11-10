@@ -84,7 +84,7 @@ public class ServerTest {
                               SELECT ?decimal
                               WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
                                          goslin:exactMass ?decimal . }""");
-        assertThat(forObject).contains("\"value\" : \"589.5433953749999\"");
+        assertThat(forObject).contains("\"value\" : \"589.543395375\"");
     }
     
     @Test
