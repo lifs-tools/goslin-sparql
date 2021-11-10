@@ -65,6 +65,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
+        <application.version.number>${project.version}</application.version.number>
         <docker.service.prefix></docker.service.prefix>
         <docker.image.prefix>docker.lifs-tools.org/lifs</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,12 +74,43 @@
         <docker.base.image.version>17-jdk-alpine</docker.base.image.version>
         <skip.docker>false</skip.docker>
         <app.port>8080</app.port>
+        <jquery.version>3.4.0</jquery.version>
+        <bootstrap.version>4.3.1</bootstrap.version>
+        <lifs.webapps.common.version>1.0.25</lifs.webapps.common.version>
+        <springfox.version>3.0.0</springfox.version>
+        <app.name>goslin-sparql</app.name>
+        <contextPath>/goslin-sparql</contextPath>
+        <start-class>org.lifstools.goslin.sparql.Server</start-class>
+        <spring.profiles.active></spring.profiles.active>
+        <!-- tracking info -->
+        <ga.id>12</ga.id>
+        <ga.url>https://lifs-tools.org/matomo/matomo.php</ga.url>
+        <ga.app.url>https://apps.lifs-tools.org/goslin-sparql</ga.app.url>
+        <!-- tool info -->
+        <jgoslin.version>2.0.0-SNAPSHOT</jgoslin.version>
+        <tool.title>JGoslin</tool.title>
+        <tool.description></tool.description>
+        <tool.author>Nils Hoffmann, Dominik Kopczynski</tool.author>
+        <tool.license>Apache License v2</tool.license>
+        <tool.licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</tool.licenseUrl>
+        <tool.version>${jgoslin.version}</tool.version>
+        <tool.contact>https://github.com/lifs-tools/jg/issues</tool.contact>
+        <tool.url>https://github.com/lifs-tools/jg</tool.url>
+        <!-- timestamp -->
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.lifs-tools</groupId>
+            <artifactId>lifs-webapps-common</artifactId>
+            <version>${lifs.webapps.common.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jgoslin-parsers</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>${jgoslin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -152,6 +184,50 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
+        <dependency> 
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId> 
+        </dependency> 
+        <dependency> 
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId> 
+        </dependency>
+        <!--SpringFox dependencies -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>-->
+        
+        <!-- webjars -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -186,9 +262,29 @@
     </dependencies>
     <build>
         <resources>
+            <!-- filter only application*.properties files -->
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>${project.basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>application.properties</include>
+                    <include>application-dev.properties</include>
+                    <include>lifs.properties</include>
+                    <include>tool.properties</include>
+                    <include>tracking.properties</include>
+                </includes>
+            </resource>
+            <!-- pick up all other properties files -->
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>application.properties</exclude>
+                    <exclude>application-dev.properties</exclude>
+                    <exclude>lifs.properties</exclude>
+                    <exclude>tool.properties</exclude>
+                    <exclude>tracking.properties</exclude>
+                </excludes>
             </resource>
         </resources>
         <pluginManagement>

@@ -57,7 +57,7 @@ public class ServerTest {
 //    }
     @Test
     public void testSelectQuery() {
-        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
                               PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
                               SELECT ?string
@@ -68,7 +68,7 @@ public class ServerTest {
 
     @Test
     public void testSelectQueryAnyGrammar() {
-        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
                               PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
                               SELECT ?string
@@ -79,7 +79,7 @@ public class ServerTest {
 
     @Test
     public void testSelectQueryMw() {
-        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
                               PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
                               SELECT ?double
@@ -90,7 +90,7 @@ public class ServerTest {
 
     @Test
     public void testSelectQuerySumFormula() {
-        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
                               PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
                               SELECT ?string
