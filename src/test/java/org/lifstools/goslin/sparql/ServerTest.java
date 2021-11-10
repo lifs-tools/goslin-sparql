@@ -65,7 +65,7 @@ public class ServerTest {
                                          goslin:className ?string . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
-    
+
     @Test
     public void testSelectQueryAnyGrammar() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
@@ -76,7 +76,7 @@ public class ServerTest {
                                          goslin:className ?string . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
-    
+
     @Test
     public void testSelectQueryMw() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",
@@ -87,7 +87,7 @@ public class ServerTest {
                                          goslin:exactMass ?decimal . }""");
         assertThat(forObject).contains("\"value\" : \"589.543395375\"");
     }
-    
+
     @Test
     public void testSelectQuerySumFormula() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/sparql/?query={query}",

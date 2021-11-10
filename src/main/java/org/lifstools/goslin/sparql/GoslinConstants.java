@@ -20,8 +20,5 @@ package org.lifstools.goslin.sparql;
  * @author nilshoffmann
  */
 public class GoslinConstants {
-
     public static final String LIPID_NOMENCLATURE = "https://identifiers.org/lipids/goslin/";
-//    public static final String LIPID_PROPERTIES = "https://identifiers.org/lipids/properties/";
-//    public static final String SHORTHAND_ONTOLOGY = LIPID_NOMENCLATURE + "shorthand2020/";
 }
