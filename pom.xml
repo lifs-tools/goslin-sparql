@@ -65,13 +65,13 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
-        <docker.service.prefix>goslin-sparql</docker.service.prefix>
+        <docker.service.prefix></docker.service.prefix>
         <docker.image.prefix>docker.lifs-tools.org/lifs</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <docker.base.image>adoptopenjdk/openjdk17</docker.base.image>
-        <docker.base.image.version>debianslim-jre</docker.base.image.version>
-        <skip.docker>true</skip.docker>
+        <docker.base.image>eclipse-temurin</docker.base.image>
+        <docker.base.image.version>17-jdk-alpine</docker.base.image.version>
+        <skip.docker>false</skip.docker>
         <app.port>8080</app.port>
     </properties>
     <dependencies>
@@ -234,10 +234,10 @@
                     <version>3.1.4</version>
                     <configuration>
                         <from>
-                            <image>${docker.base.image}</image>
+                            <image>${docker.base.image}:${docker.base.image.version}</image>
                         </from>
                         <to>
-                            <image>${docker.image.prefix}/${docker.service.prefix}-${project.artifactId}</image>
+                            <image>${docker.image.prefix}/${docker.service.prefix}${project.artifactId}</image>
                             <tags>
                                 <tag>${project.version}</tag>
                                 <!-- <tag>${project.version}${deploy.env}</tag> -->
@@ -314,9 +314,18 @@
                     <plugin>
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
-                        <configuration>
-                            <skip>${skip.docker}</skip>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>docker-push</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.docker}</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.rdf4j.http.server.readonly.QueryResponder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.lifstools.jgoslin.domain.LipidAdduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -32,6 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author nilshoffmann
  */
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles(profiles = {"test"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ServerTest {
 
