@@ -17,23 +17,26 @@ package org.lifstools.goslin.sparql;
 
 import java.util.Arrays;
 import java.util.Optional;
+import static org.lifstools.goslin.sparql.GoslinConstants.LIPID_GRAMMAR;
 import static org.lifstools.goslin.sparql.GoslinConstants.LIPID_NOMENCLATURE;
 
 /**
  * These IRIs are not authoritative yet. Identifiers.org does not have a
  * lipid(s) prefix yet.
+ * 
+ * .well-known/sparql
  *
  * @author nilshoffmann
  */
 public enum GoslinPredicate {
 
     //Subjects
-    SWISS_LIPIDS(LIPID_NOMENCLATURE, "swisslipids"),
-    LIPID_MAPS(LIPID_NOMENCLATURE, "lipidmaps"),
-    HMDB(LIPID_NOMENCLATURE, "hmdb"),
-    GOSLIN(LIPID_NOMENCLATURE, "goslin"),
-    SHORTHAND_2020(LIPID_NOMENCLATURE, "shorthand2020"),
-    ANY_GRAMMAR(LIPID_NOMENCLATURE, "any"),
+    SWISS_LIPIDS(LIPID_GRAMMAR, "swisslipids"),
+    LIPID_MAPS(LIPID_GRAMMAR, "lipidmaps"),
+    HMDB(LIPID_GRAMMAR, "hmdb"),
+    GOSLIN(LIPID_GRAMMAR, "goslin"),
+    SHORTHAND_2020(LIPID_GRAMMAR, "shorthand2020"),
+    ANY_GRAMMAR(LIPID_GRAMMAR, "any"),
     //Predicates
     LIPID_CATEGORY_NAME(LIPID_NOMENCLATURE, "categoryName"),
     LIPID_CLASS_NAME(LIPID_NOMENCLATURE, "className"),

@@ -15,8 +15,6 @@ import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.EvaluationStrategy;
-import org.eclipse.rdf4j.query.algebra.evaluation.impl.BindingAssigner;
-import org.eclipse.rdf4j.query.algebra.evaluation.impl.FilterOptimizer;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategy;
 import org.eclipse.rdf4j.query.impl.EmptyBindingSet;
 import org.eclipse.rdf4j.sail.SailConnection;
@@ -48,14 +46,18 @@ public class GoslinSailConnection implements SailConnection {
         try {
 
             GoslinTripleSource tripleSource = new GoslinTripleSource(vf);
-
+            BoostingEvaluationStatistics bes = new BoostingEvaluationStatistics();
             EvaluationStrategy strategy = new StrictEvaluationStrategy(tripleSource, dataset, null);
-            tupleExpr = tupleExpr.clone();
-            new BindingAssigner().optimize(tupleExpr, dataset, bindings);
-
-            new FilterOptimizer().optimize(tupleExpr, dataset, bindings);
-
-            return strategy.evaluate(tupleExpr, EmptyBindingSet.getInstance());
+//            QueryOptimizerPipeline optPipeline = () -> Arrays.asList(
+//                    new QueryOptimizerList(
+//                            new QueryJoinOptimizer(),
+//                            new BindingAssigner(),
+//                            new FilterOptimizer()
+//                    )
+//            );
+//            strategy.setOptimizerPipeline(optPipeline);
+            TupleExpr optTupleExpr = strategy.optimize(tupleExpr.clone(), bes, bindings);
+            return strategy.evaluate(optTupleExpr, EmptyBindingSet.getInstance());
         } catch (QueryEvaluationException e) {
             throw new SailException(e);
         }

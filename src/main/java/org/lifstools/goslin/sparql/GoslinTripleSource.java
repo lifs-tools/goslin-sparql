@@ -23,6 +23,12 @@ import org.lifstools.jgoslin.parser.Parser;
 import org.lifstools.jgoslin.parser.ShorthandParser;
 import org.lifstools.jgoslin.parser.SwissLipidsParser;
 
+/**
+ * query optimizer set statistics for parsing statements very low, other
+ * statements higher
+ *
+ * @author nilshoffmann
+ */
 public class GoslinTripleSource implements TripleSource {
 
     private final ValueFactory vf;

@@ -21,4 +21,5 @@ package org.lifstools.goslin.sparql;
  */
 public class GoslinConstants {
     public static final String LIPID_NOMENCLATURE = "https://identifiers.org/lipids/goslin/";
+    public static final String LIPID_GRAMMAR = LIPID_NOMENCLATURE + "grammar/";
 }

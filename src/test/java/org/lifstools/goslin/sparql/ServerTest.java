@@ -24,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -63,6 +65,23 @@ public class ServerTest {
                               SELECT ?string
                               WHERE { [] goslin:swisslipids 'Cer(d18:1/20:2)' ;
                                          goslin:className ?string . }""");
+        assertThat(forObject).contains("\"value\" : \"Cer\"");
+    }
+    
+    @Test
+    public void testMalformedQuery() {
+        ResponseEntity<String> result = this.restTemplate.getForEntity("http://localhost:" + port + "/goslin-sparql/sparql/", String.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+    
+    @Test
+    public void testSelectQueryOptimization() {
+        String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
+                String.class, """
+                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              SELECT ?string
+                              WHERE { [] goslin:className ?string ;
+                                         goslin:swisslipids 'Cer(d18:1/20:2)' . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
 
