@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.lifstools.goslin.sparql.config.NewsPropertyConfig;
+import org.lifstools.goslin.sparql.config.SparqlQueriesPropertyConfig;
 import org.lifstools.goslin.sparql.services.PageBuilderService;
 import org.lifstools.jgoslin.domain.LipidClasses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +42,14 @@ public class HomeController {
     private final PageBuilderService pageBuilderService;
     private final LocaleResolver localeResolver;
     private final NewsPropertyConfig newsPropertyConfig;
+    private final SparqlQueriesPropertyConfig sparqlQueryPropertiesConfig;
 
     @Autowired
-    public HomeController(PageBuilderService pageBuilderService, LocaleResolver localeResolver, NewsPropertyConfig newsPropertyConfig) {
+    public HomeController(PageBuilderService pageBuilderService, LocaleResolver localeResolver, NewsPropertyConfig newsPropertyConfig, SparqlQueriesPropertyConfig sparqlQueryPropertiesConfig) {
         this.pageBuilderService = pageBuilderService;
         this.localeResolver = localeResolver;
         this.newsPropertyConfig = newsPropertyConfig;
+        this.sparqlQueryPropertiesConfig = sparqlQueryPropertiesConfig;
     }
 
     @GetMapping("/")
@@ -74,6 +77,7 @@ public class HomeController {
             }
             return t.className.compareTo(t1.className);
         }).collect(Collectors.toList()));
+        model.addObject("sparqlQueries", sparqlQueryPropertiesConfig);
         return model;
     }
 }

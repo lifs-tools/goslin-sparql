@@ -11,6 +11,10 @@
                 /*]]>*/
             </script>
             <script th:if="${page!=null and page.gaId != null}" th:src="@{/js/lifs-matomo-opt-in.js}" src="/js/lifs-matomo-opt-in.js" type="text/javascript"></script>
+            <script>
+              const yasgui = new Yasgui(document.getElementById("yasgui"));
+            </script>
+            <script th:src="@{/js/app.js}" src="/js/app.js" type="text/javascript"></script>
         </div>
     </body>
 </html>

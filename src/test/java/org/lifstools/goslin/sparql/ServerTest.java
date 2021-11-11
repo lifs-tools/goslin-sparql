@@ -15,10 +15,23 @@
  */
 package org.lifstools.goslin.sparql;
 
+import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.eclipse.rdf4j.http.server.readonly.QueryResponder;
+import org.eclipse.rdf4j.http.client.SPARQLProtocolSession;
+import org.eclipse.rdf4j.http.protocol.UnauthorizedException;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryInterruptedException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.parser.ParsedQuery;
+import org.eclipse.rdf4j.query.parser.sparql.SPARQLParser;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.lifstools.goslin.sparql.controller.ReadonlyQueryResponder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -37,12 +50,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles(profiles = {"test"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ServerTest {
+    
+    private static final Logger log = LoggerFactory.getLogger(ServerTest.class);
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private QueryResponder queryResponder;
+    private ReadonlyQueryResponder queryResponder;
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -61,27 +76,29 @@ public class ServerTest {
     public void testSelectQuery() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
-                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                              PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
                               SELECT ?string
-                              WHERE { [] goslin:swisslipids 'Cer(d18:1/20:2)' ;
+                              WHERE { [] grammar:swisslipids 'Cer(d18:1/20:2)' ;
                                          goslin:className ?string . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
-    
+
     @Test
     public void testMalformedQuery() {
         ResponseEntity<String> result = this.restTemplate.getForEntity("http://localhost:" + port + "/goslin-sparql/sparql/", String.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
-    
+
     @Test
     public void testSelectQueryOptimization() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
-                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                              PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
                               SELECT ?string
                               WHERE { [] goslin:className ?string ;
-                                         goslin:swisslipids 'Cer(d18:1/20:2)' . }""");
+                                         grammar:swisslipids 'Cer(d18:1/20:2)' . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
 
@@ -89,9 +106,10 @@ public class ServerTest {
     public void testSelectQueryAnyGrammar() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
-                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                              PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
                               SELECT ?string
-                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                              WHERE { [] grammar:any 'Cer(d18:1/20:2)' ;
                                          goslin:className ?string . }""");
         assertThat(forObject).contains("\"value\" : \"Cer\"");
     }
@@ -100,9 +118,10 @@ public class ServerTest {
     public void testSelectQueryMw() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
-                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                              PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
                               SELECT ?double
-                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                              WHERE { [] grammar:any 'Cer(d18:1/20:2)' ;
                                          goslin:exactMass ?double . }""");
         assertThat(forObject).contains("\"value\" : \"589.54339537"); // this is weird, sometimes, values seem to be rounded?
     }
@@ -111,11 +130,37 @@ public class ServerTest {
     public void testSelectQuerySumFormula() {
         String forObject = this.restTemplate.getForObject("http://localhost:" + port + "/goslin-sparql/sparql/?query={query}",
                 String.class, """
-                              PREFIX goslin: <https://identifiers.org/lipids/nomenclature/>
+                              PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                              PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
                               SELECT ?string
-                              WHERE { [] goslin:any 'Cer(d18:1/20:2)' ;
+                              WHERE { [] grammar:any 'Cer(d18:1/20:2)' ;
                                          goslin:sumFormula ?string . }""");
         assertThat(forObject).contains("\"value\" : \"C38H71NO3\"");
+    }
+
+    @Test
+    public void testGoslin() throws UnauthorizedException, QueryInterruptedException, RepositoryException,
+            MalformedQueryException, IOException {
+        TestSPARQLRepository rep = new TestSPARQLRepository("http://localhost:" + port + "/goslin-sparql/sparql/");
+        rep.init();
+        String query = "PREFIX goslin: <https://identifiers.org/lipids/goslin/>\n"
+                + "PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar>\n"
+                + "SELECT * WHERE {    [] grammar:swisslipids \"NAE (18:1(9Z))\" ;\n"
+                + "       goslin:className ?className \n" + "}";
+        ParsedQuery parseQuery = new SPARQLParser().parseQuery(query, null);
+        SPARQLProtocolSession session = rep.createSPARQLProtocolSession();
+        try {
+            TupleQueryResult sendTupleQuery = session.sendTupleQuery(QueryLanguage.SPARQL, query, null, false);
+            while (sendTupleQuery.hasNext()) {
+                assertNotNull(sendTupleQuery.next());
+            }
+        } catch (Exception re) {
+            log.error("Caught exception: ", re);
+            throw re;
+        } finally {
+            session.close();
+            rep.shutDown();
+        }
     }
 
 }

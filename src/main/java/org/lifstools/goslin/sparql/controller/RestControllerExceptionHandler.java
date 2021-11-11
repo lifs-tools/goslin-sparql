@@ -19,10 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,15 +37,23 @@ public class RestControllerExceptionHandler {
 
     private final static Logger log = LoggerFactory.getLogger(RestControllerExceptionHandler.class);
     
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handle(HttpMessageNotReadableException e) {
+        log.error("Returning HTTP 400 Bad Request", e);
+    }
+    
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<String> handleMissingRequestParameterException(MissingServletRequestParameterException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handleMissingRequestParameterException(MissingServletRequestParameterException e) {
         log.error("Caught exception for RestController:", e);
-        return new ResponseEntity<>("Request failed! " + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+//        return new ResponseEntity<>("Request failed! " + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleUnexpectedException(Exception e) {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public void handleUnexpectedException(Exception e) {
         log.error("Caught exception for RestController:", e);
-        return new ResponseEntity<>("Request failed! " + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        return new ResponseEntity<>("Request failed! " + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -134,3 +134,20 @@ pre {
     border-left-color: #ffeeba;
     background-color: #fff3cd;
 }
+
+.yasgui .autocompleteWrapper {
+    display: none !important;
+}
+
+.yasgui .controlbar {
+    display: flex;
+    align-content: center;
+    max-height: 50px;
+    height: 30px;
+    padding-bottom: 12px;
+}
+
+.queryIcon svg {
+    width: 25px !important;
+    height: 25px !important;
+}

@@ -22,7 +22,6 @@ import de.isas.lifs.webapps.common.domain.DefaultAppInfo;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.concurrent.Executor;
-import org.eclipse.rdf4j.http.server.readonly.QueryResponder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
@@ -30,7 +29,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -59,7 +57,7 @@ import springfox.documentation.spring.web.plugins.Docket;
  *
  * @author Nils Hoffmann &lt;nils.hoffmann@isas.de&gt;
  */
-@Import(QueryResponder.class)
+//@Import(QueryResponder.class)
 @Configuration
 @EnableAsync
 public class WebConfig implements WebMvcConfigurer {

@@ -20,6 +20,8 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.EvaluationStatistics;
 
 /**
+ * This implementation allows to adjust the cardinality of terms that stem from the grammar
+ * namespace to perform parsing steps before any further steps are executed.
  *
  * @author nilshoffmann
  */

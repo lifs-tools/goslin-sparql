@@ -13,18 +13,18 @@
                 <th:block th:include="fragments/nav :: nav"></th:block>
                 <main role="main" class="my-3 col-md-12">
                     <div class="row">
-                        <div class="col-sm-9">
-                            <th:block th:include="fragments/overview :: overview"></th:block>
+                        <div class="col-sm-12">
+                            <!--<th:block th:include="fragments/overview :: overview"></th:block>-->
+                            <th:block th:include="fragments/manual :: manual"></th:block>
                             <th:block th:include="fragments/news :: news"></th:block>
-                            <!--<th:block th:include="fragments/manual :: manual"></th:block>-->
                             <!--<th:block th:include="fragments/news :: lipidclasses"></th:block>-->
                             <th:block th:include="fragments/news :: contributing"></th:block>
                             <th:block th:include="fragments/news :: citing"></th:block>
                             <th:block th:include="fragments/news :: acknowledgements"></th:block>
                         </div>
-                        <div class="col-sm-3">
+<!--                        <div class="col-sm-3">
                             <nav id="toc" data-toggle="toc" class="sticky-top"></nav>
-                        </div>
+                        </div>-->
                     </div>
 
                 </main>

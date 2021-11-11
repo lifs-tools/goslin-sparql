@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 @Configuration
 @EnableConfigurationProperties(value = {NewsPropertyConfig.class})
-@ComponentScan(basePackages = {"org.eclipse.rdf4j", "de.isas.lifs.webapps", "org.lifstools.goslin.sparql"})
+@ComponentScan(basePackages = {"de.isas.lifs.webapps", "org.lifstools.goslin.sparql"})
 public class Server {
     public static void main(String[] args) {
         SpringApplication.run(Server.class, args);

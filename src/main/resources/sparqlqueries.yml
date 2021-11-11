@@ -1,0 +1,16 @@
+## YAML Template.
+---
+sparqlqueries:
+    
+    - description: Parse a lipid name using the Swiss Lipids grammar and convert it to shorthand nomenclature class level.
+      query:  > PREFIX goslin: <https://identifiers.org/lipids/goslin/>
+                PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
+                SELECT ?string 
+                WHERE { [] goslin:className ?string ;
+                           grammar:swisslipids 'Cer(d18:1/20:2)' . }
+    - description: Parse a lipid name using the any grammar and convert it to shorthand nomenclature class level.
+      query:  > PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+                PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
+                SELECT ?string 
+                WHERE { [] grammar:any 'Cer(d18:1/20:2)' ;
+                           goslin:className ?string . }
