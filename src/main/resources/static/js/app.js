@@ -16,7 +16,13 @@
 var appctx = $("meta[name='appctx']").attr("content");
 
 const yasgui = new Yasgui(document.getElementById("yasgui"), {
-  requestConfig: { endpoint: window.location.href+"/"+appctx+"/sparql/" },
+  requestConfig: { endpoint: "https://apps.lifs-tools.org/goslin-sparql-dev/sparql/" },
   copyEndpointOnNewTab: false,
 });
+const query = `PREFIX goslin: <https://identifiers.org/lipids/goslin/> 
+PREFIX grammar: <https://identifiers.org/lipids/goslin/grammar/>
+SELECT ?string 
+WHERE { [] goslin:className ?string ;
+           grammar:any 'Cer(d18:1/20:2)' . }`;
+yasgui.getTab().yasqe.setValue(query);
 
