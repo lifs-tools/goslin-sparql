@@ -19,6 +19,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.rdf4j.http.client.SPARQLProtocolSession;
 import org.eclipse.rdf4j.http.protocol.UnauthorizedException;
+import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.MalformedQueryException;
 import org.eclipse.rdf4j.query.QueryInterruptedException;
 import org.eclipse.rdf4j.query.QueryLanguage;
@@ -150,7 +151,8 @@ public class ServerTest {
         ParsedQuery parseQuery = new SPARQLParser().parseQuery(query, null);
         SPARQLProtocolSession session = rep.createSPARQLProtocolSession();
         try {
-            TupleQueryResult sendTupleQuery = session.sendTupleQuery(QueryLanguage.SPARQL, query, null, false);
+            Dataset ds = parseQuery.getDataset();
+            TupleQueryResult sendTupleQuery = session.sendTupleQuery(QueryLanguage.SPARQL, query, ds, true, null);
             while (sendTupleQuery.hasNext()) {
                 assertNotNull(sendTupleQuery.next());
             }

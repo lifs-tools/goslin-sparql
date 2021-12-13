@@ -75,7 +75,7 @@ public class HomeController {
             if (cmp != 0) {
                 return cmp;
             }
-            return t.className.compareTo(t1.className);
+            return t.lipidClassName.compareTo(t1.lipidClassName);
         }).collect(Collectors.toList()));
         model.addObject("sparqlQueries", sparqlQueryPropertiesConfig);
         return model;

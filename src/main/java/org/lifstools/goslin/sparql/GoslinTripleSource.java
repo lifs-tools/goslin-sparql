@@ -58,19 +58,19 @@ public class GoslinTripleSource implements TripleSource {
         //            goslin:lipidClassName ?string . }
         switch (gi.get()) {
             case SWISS_LIPIDS -> {
-                return handleParser(SwissLipidsParser.newInstance(), predicate, object);
+                return handleParser(new SwissLipidsParser(), predicate, object);
             }
             case LIPID_MAPS -> {
-                return handleParser(LipidMapsParser.newInstance(), predicate, object);
+                return handleParser(new LipidMapsParser(), predicate, object);
             }
             case GOSLIN -> {
-                return handleParser(GoslinParser.newInstance(), predicate, object);
+                return handleParser(new GoslinParser(), predicate, object);
             }
             case SHORTHAND_2020 -> {
-                return handleParser(ShorthandParser.newInstance(), predicate, object);
+                return handleParser(new ShorthandParser(), predicate, object);
             }
             case HMDB -> {
-                return handleParser(HmdbParser.newInstance(), predicate, object);
+                return handleParser(new HmdbParser(), predicate, object);
             }
             case ANY_GRAMMAR -> {
                 return handleAnyGrammar(predicate, object);

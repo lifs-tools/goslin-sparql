@@ -20,8 +20,9 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.EvaluationStatistics;
 
 /**
- * This implementation allows to adjust the cardinality of terms that stem from the grammar
- * namespace to perform parsing steps before any further steps are executed.
+ * This implementation allows to adjust the cardinality of terms that stem from
+ * the grammar namespace to perform parsing steps before any further steps are
+ * executed.
  *
  * @author nilshoffmann
  */
@@ -56,8 +57,8 @@ public class BoostingEvaluationStatistics extends EvaluationStatistics {
         return new BoostingCardinalityCalculator();
     }
 
-    protected BoostingCardinalityCalculator getCardinalityCalculator() {
-        return (BoostingCardinalityCalculator) cc;
+    protected BoostingCardinalityCalculator createBoostingCardinalityCalculator() {
+        return new BoostingCardinalityCalculator();
     }
 
     @Override
@@ -65,13 +66,14 @@ public class BoostingEvaluationStatistics extends EvaluationStatistics {
         if (expr instanceof StatementPattern sp) {
             if (sp.getSubjectVar() == null && sp.getObjectVar().getValue().isIRI()) {
                 String iri = sp.getObjectVar().getValue().stringValue();
+                BoostingCardinalityCalculator cc = createBoostingCardinalityCalculator();
                 // make grammar statements that trigger a parse cheaper -> use the VAR_CARDINALITY value of 10 in CardinalityCalculator
                 if (iri.startsWith(GoslinConstants.LIPID_GRAMMAR)) {
                     return 10;
                 } else {
                     // make other statements that depend on the parse more expensive so that they are optimized to execute later
-                    return 2 * getCardinalityCalculator().getSubjectCardinality(sp) * getCardinalityCalculator().getPredicateCardinality(sp) * getCardinalityCalculator().getObjectCardinality(sp)
-                            * getCardinalityCalculator().getContextCardinality(sp);
+                    return 2 * cc.getSubjectCardinality(sp) * cc.getPredicateCardinality(sp) * cc.getObjectCardinality(sp)
+                            * cc.getContextCardinality(sp);
                 }
             }
         }
