@@ -74,7 +74,7 @@
         <docker.base.image.version>17-jdk-alpine</docker.base.image.version>
         <skip.docker>false</skip.docker>
         <app.port>8080</app.port>
-        <jquery.version>3.4.0</jquery.version>
+        <jquery.version>3.6.0</jquery.version>
         <bootstrap.version>4.3.1</bootstrap.version>
         <lifs.webapps.common.version>1.0.26</lifs.webapps.common.version>
         <springfox.version>3.0.0</springfox.version>
