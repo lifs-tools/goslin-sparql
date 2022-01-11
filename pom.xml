@@ -76,7 +76,7 @@
         <app.port>8080</app.port>
         <jquery.version>3.4.0</jquery.version>
         <bootstrap.version>4.3.1</bootstrap.version>
-        <lifs.webapps.common.version>1.0.26</lifs.webapps.common.version>
+        <lifs.webapps.common.version>1.1.27</lifs.webapps.common.version>
         <springfox.version>3.0.0</springfox.version>
         <app.name>goslin-sparql</app.name>
         <contextPath>/goslin-sparql</contextPath>
